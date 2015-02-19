@@ -2,7 +2,7 @@
 Linux power management utility for Lenovo Thinkpad X201.
 
 ## Requirements and setup
-This utility was specifically designed for a Lenovo Thinkpad X201 laptop with core-i5 processor and Linux Mint 17.
+This utility was specifically designed for Lenovo Thinkpad X201 laptop with core-i5 processor and Linux Mint 17.
 It is likely to work on other platforms as well, but it may need some customizations.
 
 Installation is pretty simple. All you need to do is download the `*.deb` package and install it:
@@ -31,7 +31,7 @@ By calling `powerman` (as root!), you will get an output similar to this one:
 From the output above, capabilities of the utility are pretty clear. It allows you to change CPU frequency and
 enable or disable wireless devices. Just run `powerman help` to get more informations.
 
-When you disconnect AC adapter and run from battery, it will automatically make CPU to run on the minimal possible
+When you disconnect AC adapter and run from battery, it will automatically make CPU run on the minimal possible
 frequency. After connecting laptop back to AC power again, it will alter it back to the maximal performance.
 
 There's also a BASH completition support, so you don't have to type commands at full length; just press `[TAB]`.
