@@ -4,7 +4,7 @@ Version: 1.0.0
 Architecture: amd64
 Maintainer: tomas@tzima.cz
 Installed-Size: 10
-Depends: bash, linux-tools-common, linux-tools-3.13.0-24-generic, pm-utils
+Depends: bash, linux-tools-common, linux-tools-3.13.0-24-generic, acpid
 Conflicts:
 Replaces:
 Section:
