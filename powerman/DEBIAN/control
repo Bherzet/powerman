@@ -1,0 +1,13 @@
+Package: powerman
+Source:
+Version: 1.0.0
+Architecture: amd64
+Maintainer: tomas@tzima.cz
+Installed-Size: 10
+Depends: bash, linux-tools-common, linux-tools-3.13.0-24-generic, pm-utils
+Conflicts:
+Replaces:
+Section:
+Priority: optional
+Homepage:
+Description: Script for the basic power consumption management. Specifically designed for Lenovo Thinkpad X201 with Core-i5 *only*.
