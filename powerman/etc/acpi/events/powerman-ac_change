@@ -1,0 +1,2 @@
+event=battery
+action=/etc/acpi/powerman.sh
