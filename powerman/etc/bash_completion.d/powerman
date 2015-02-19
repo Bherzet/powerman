@@ -1,0 +1,33 @@
+_powerman() {
+	local cur prev opts
+	COMPREPLY=()
+	cur="${COMP_WORDS[COMP_CWORD]}"
+	prev="${COMP_WORDS[COMP_CWORD-1]}"
+	prew="${COMP_WORDS[COMP_CWORD-2]}"
+	opts="help enable disable cpufreq"
+	devs="wifi bluetooth wwan"
+	freq="auto juicy cold min max"
+	vals="min max a b c d e f g i j k 2400000 2399000 2266000 2133000 1999000 1866000 1733000 1599000"
+
+	if [[ ${prev} == 'enable' ]] || [[ ${prev} == 'disable' ]]; then
+		COMPREPLY=( $(compgen -W "${devs}" -- ${cur}) )
+		return 0
+	elif [[ ${prev} == 'cpufreq' ]]; then
+		COMPREPLY=( $(compgen -W "${freq}" -- ${cur}) )
+		return 0
+	fi;
+
+	if [[ ${prew} == 'cpufreq' ]]; then
+		if [[ ${prev} == 'max' ]] || [[ ${prev} == 'min' ]]; then
+			COMPREPLY=( $(compgen -W "${vals}" -- ${cur}) )
+			return 0
+		fi;
+	fi;
+
+	if [[ ${cur} == * ]]; then
+		COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+		return 0
+	fi;
+}
+
+complete -F _powerman powerman

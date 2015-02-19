@@ -1,0 +1,56 @@
+#!/bin/bash
+
+if [[ $1 == 'help' ]]; then
+	echo "Print current informations"
+	echo "$ powerman"
+	echo
+	echo "Control power of wireless technologies"
+	echo "$ powerman <enable/disable> <interface>"
+	echo "    interfaces:"
+	echo "        wifi"
+	echo "        bluetooth"
+	echo "        wwan"
+	echo
+	echo "Control CPU frequency"
+	echo "$ powerman cpufreq <mode>"
+	echo "    mode:"
+	echo "        auto (resets to default state)"
+	echo "        juicy (maximal performance)"
+	echo "        cold (maximal power savings)"
+	echo "$ powerman cpufreq <valueName> <value>"
+	echo "    valueName:"
+	echo "        max (maximal frequency)"
+	echo "        min (minimal frequency)"
+	echo "    value:"
+	echo "        Value can be either an actual frequency (Hz), a shortcut (letters"
+	echo "        a, b, ..., k, where a is the highest frequency) or 'min' ('max') for"
+	echo "        the minimal (maximal) possible frequency."
+
+elif [[ $1 == 'enable' ]] || [[ $1 == 'disable' ]]; then
+	echo $1 | sed -e 's/enable/unblock/g;s/disable/block/g' | tr -d '\n' | xargs -0 printf 'rfkill %s '$2'' | bash || echo -e "\nError: Use 'on' or 'off'. Run with 'help' to get more informations."; exit 1
+elif [[ $1 == 'cpufreq' ]]; then
+	if [[ $2 == 'auto' ]]; then
+		cpupower frequency-set -g ondemand -u 2400000 -d 1199000
+	elif [[ $2 == 'juicy' ]]; then
+		cpupower frequency-set -g performance -u 2400000 -d 2400000
+	elif [[ $2 == 'cold' ]]; then
+		cpupower frequency-set -g powersave -u 1199000 -d 1199000
+	else
+		read param < <(echo $2    | sed -e 's/max/u/g;s/min/d/g')
+		read freq  < <(echo $3    | sed -e 's/max/a/g;s/min/k/g')
+		read freq  < <(echo $freq | sed -e 's/a/2400000/g;s/b/2399000/g;s/c/2266000/g;s/d/2133000/g;s/e/1999000/g;s/f/1866000/g;s/g/1733000/g;s/h/1599000/g;s/i/1466000/g;s/j/1333000/g;s/k/1199000/g;')
+		echo 'cpupower frequency-set -'$param' '$freq'' | bash || echo -e "\Error. Run with 'help' to get more informations."; exit 1
+	fi;
+elif [[ $1 != '' ]]; then
+	echo "Error: Unknown command. Run 'powerman help' for help."
+	exit 1;
+else
+	expr `cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq` / 1000 | tr -d '\n' | xargs -0 printf "CPU cur freq:  %s MHz"
+	echo;echo
+	sensors | grep 'Core 0' | cut -d':' -f2 | cut -d+ -f2 | cut -d' ' -f1 | xargs -0 printf "CPU tmp core0: %s"
+	sensors | grep 'Core 2' | cut -d':' -f2 | cut -d+ -f2 | cut -d' ' -f1 | xargs -0 printf "CPU tmp core2: %s"
+	echo
+	rfkill list | grep -i 'Wireless LAN' -A1 | tail -n1 | cut -d' ' -f3 | sed -e 's/no/enabled/g;s/yes/disabled/g' | xargs -0 printf "Wifi:          %s"
+	rfkill list | grep -i 'Bluetooth' -A1    | tail -n1 | cut -d' ' -f3 | sed -e 's/no/enabled/g;s/yes/disabled/g' | xargs -0 printf "Bluetooth:     %s"
+	rfkill list | grep -i 'Wireless WAN' -A1 | tail -n1 | cut -d' ' -f3 | sed -e 's/no/enabled/g;s/yes/disabled/g' | xargs -0 printf "WWAN:          %s"
+fi;
