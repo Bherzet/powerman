@@ -7,7 +7,7 @@ It is likely to work on other platforms as well, but it may need some customizat
 
 Installation is pretty simple. All you need to do is download the `*.deb` package and install it:
 
-    # wget https://github.com/tzima/powerman/blob/master/dist/powerman.deb
+    # wget https://github.com/tzima/powerman/releases/download/1.0.0/powerman.deb
     # dpkg -i powerman.deb
     
 Powerman requires utility `cpupower` (provided by `linux-tools-common`). Be sure to run `cpupower` and check it runs
