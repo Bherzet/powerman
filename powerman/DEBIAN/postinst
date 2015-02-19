@@ -1,0 +1,2 @@
+# restart acpid so newly created event is considered
+service acpid restart
